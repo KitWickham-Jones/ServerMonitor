@@ -1,0 +1,21 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./monitoring-stack/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+  grafana:
+    image: grafana/grafana:latest   
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring-stack/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus_data:
+  grafana_data:
